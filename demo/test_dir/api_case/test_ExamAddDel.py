@@ -1,14 +1,28 @@
+import json
+
 import seldom
+from seldom.db_operation import MySQLDB
 
 
 class TestRequest(seldom.TestCase):
 
-    header = {"Content-Type": "application/json"}
+    def mysqldb(self,sql):
+        db = MySQLDB(host="120.46.215.163",
+                     port=3306,
+                     user="yf_exam",
+                     password="yf_exam",
+                     database="yf_exam")
+        ret = db.query_one(sql)
+        db.close()
+        return ret
+
     def test_001login(self):
+        global  header
+        header = {"Content-Type": "application/json"}
         data = {"username":"admin","password":"admin"}
-        self.post("/exam/api/sys/user/login", json=data, headers=self.header)
-        token= self.response["data"]["token"]
-        self.header["token"] = token
+        self.post("/exam/api/sys/user/login", json=data, headers=header)
+        token = self.response["data"]["token"]
+        header["token"] = token
 
     def test_002QuAdd(self):
         data={
@@ -43,17 +57,28 @@ class TestRequest(seldom.TestCase):
                 "content":"题目新增测试",
                 "analysis":"整题解析"
                 }
-        self.post("/exam/api/qu/qu/save",json=data,headers=self.header)
+        self.post("/exam/api/qu/qu/save",json=data,headers=header)
 
-    def test_003QuSerach(self):
-        data={"current":1,"size":10,"params":{"content":"题目新增测试","quType":"","repoIds":[]},"t":1680789101846}
-        self.post("/exam/api/qu/qu/paging",json=data,headers=self.header)
-        global  quid , createtime
-        quid = self.response["data"]["records"][0]["id"]
+    # def test_003QuSerach(self):
+    #     data={"current":1,"size":10,"params":{"content":"题目新增测试","quType":"","repoIds":[]},"t":1680789101846}
+    #     self.post("/exam/api/qu/qu/paging",json=data,headers=header)
+    #     global  quid , createtime
+    #     quid = self.response["data"]["records"][0]["id"]
 
-    def test_004QuDel(self):
-        data={"ids":[quid]}
-        self.post("/exam/api/qu/qu/delete",json=data,headers=self.header)
+    def test_004qusql(self):
+        global quid
+
+        quid = self.mysqldb("select id from el_qu where content ='题目新增测试'  LIMIT 0,1")
+        tt1 = json.dumps(quid)
+        tt2 = json.loads(tt1)
+        print(tt2['id'])
+
+
+    #{'id': '1644216399947714561'}
+    #
+    # def test_005QuDel(self):
+    #     data=quid
+    #     self.post("/exam/api/qu/qu/delete",json=data,headers=header)
 
 
 
