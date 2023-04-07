@@ -1,0 +1,25 @@
+import seldom
+from seldom import Steps
+
+
+class BingTest(seldom.TestCase):
+    """Bing search test case"""
+
+    def test_case(self):
+        """a simple test case """
+        self.open("https://cn.bing.com")
+        self.type(id_="sb_form_q", text="seldom", enter=True)
+        self.assertTitle("seldom - 搜索")
+
+    def test_case_two(self):
+        """method chaining """
+        Steps(url="https://cn.bing.com").open().find("#sb_form_q").type("seldom").submit()
+        self.assertTitle("seldom - 搜索3")
+
+    def test_case_three(self):
+        """method chaining """
+        Steps(url="https://cn.bing.com").open().find("#sb_form_q3333").type("seldom").submit()
+        self.assertTitle("seldom - 搜索3")
+
+if __name__ == '__main__':
+    seldom.main(browser="gc")
