@@ -67,18 +67,18 @@ class TestRequest(seldom.TestCase):
 
     def test_004qusql(self):
         global quid
+        t1 = self.mysqldb("select id from el_qu where content ='题目新增测试'  LIMIT 0,1")
+        t2 = json.dumps(t1)
+        quid = json.loads(t2)["id"]
+        print(quid)
 
-        quid = self.mysqldb("select id from el_qu where content ='题目新增测试'  LIMIT 0,1")
-        tt1 = json.dumps(quid)
-        tt2 = json.loads(tt1)
-        print(tt2['id'])
 
 
-    #{'id': '1644216399947714561'}
-    #
-    # def test_005QuDel(self):
-    #     data=quid
-    #     self.post("/exam/api/qu/qu/delete",json=data,headers=header)
+
+
+    def test_005QuDel(self):
+        data=quid
+        self.post("/exam/api/qu/qu/delete",json=data,headers=header)
 
 
 
