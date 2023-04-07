@@ -22,5 +22,4 @@ if __name__ == '__main__':
                 title="seldom自带 Web demo",
                 tester="虫师",
                 description=["Browser: Chrome"],
-                base_url="http://120.46.215.163:8102/",
                 timeout = 3)

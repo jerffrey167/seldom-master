@@ -6,8 +6,8 @@ class TestRequest(seldom.TestCase):
     header = {"Content-Type": "application/json"}
     def test_001login(self):
         data = {"username":"admin","password":"admin"}
-        r = self.post("/exam/api/sys/user/login", json=data, headers=self.header)
-        token = r.json()["data"]["token"]
+        self.post("/exam/api/sys/user/login", json=data, headers=self.header)
+        token= self.response["data"]["token"]
         self.header["token"] = token
 
     def test_002QuAdd(self):
@@ -60,3 +60,4 @@ class TestRequest(seldom.TestCase):
 
 if __name__ == '__main__':
     seldom.main()
+
